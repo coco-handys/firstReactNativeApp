@@ -3,8 +3,12 @@ import React, {
   useContext,
   useState,
   useCallback,
-  useMemo
+  useMemo, useEffect
 } from 'react';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const TODO_STORAGE_KEY = '@MyApp:todos';
 
 export type TodoItem = {
   key: string;
@@ -15,12 +19,46 @@ export type TodoContextType = {
   todos: TodoItem[];
   addTodo: (text: string) => void;
   deleteTodo: (key:string) => void;
+  isLoaded: boolean;
 }
 
 const TodoContext = createContext<TodoContextType | undefined>(undefined);
 
 export const TodoProvider = ({children}) => {
   const [todos, setTodos] = useState<TodoItem[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadTodos = async () => {
+      try{
+        const storedTods = await AsyncStorage.getItem(TODO_STORAGE_KEY);
+        if(storedTods !== null){
+          setTodos(JSON.parse(storedTods));
+        }
+      } catch (e){
+        console.error('Failed to load Todos:', e);
+      } finally {
+        setIsLoaded(true);
+      }
+    }
+    loadTodos();
+  }, []);
+
+  useEffect(() => {
+    if(!isLoaded){
+      return;
+    }
+
+    const saveTodos = async () => {
+      try{
+        const jsonValue = JSON.stringify(todos);
+        await AsyncStorage.setItem(TODO_STORAGE_KEY, jsonValue);
+      } catch(e){
+        console.error('Failed to save Todos:', e);
+      }
+    }
+    saveTodos();
+  }, [todos, isLoaded]);
 
   const addTodo = useCallback((text:string) => {
     if(text.trim().length === 0){
@@ -43,7 +81,8 @@ export const TodoProvider = ({children}) => {
     todos,
     addTodo,
     deleteTodo,
-  }),[todos, addTodo, deleteTodo]);
+    isLoaded
+  }),[todos, addTodo, deleteTodo, isLoaded]);
 
   return (
     <TodoContext.Provider value={contextValue}>
