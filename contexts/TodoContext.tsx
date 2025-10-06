@@ -19,6 +19,7 @@ export type TodoContextType = {
   todos: TodoItem[];
   addTodo: (text: string) => void;
   deleteTodo: (key:string) => void;
+  updateTodo: (key:string, newText:string) => void;
   isLoaded: boolean;
 }
 
@@ -73,6 +74,13 @@ export const TodoProvider = ({children}) => {
     ])
   }, []);
 
+  const updateTodo = useCallback((key:string, newText:string) => {
+    if(newText.trim().length === 0) {
+      return;
+    }
+    setTodos(currentTodo => currentTodo.map(todo => todo.key === key ? {...todo, text: newText} : todo));
+  }, []);
+
   const deleteTodo = useCallback((key:string) => {
     setTodos(currentTodo => currentTodo.filter(todo => todo.key !== key));
   } ,[]);
@@ -81,8 +89,9 @@ export const TodoProvider = ({children}) => {
     todos,
     addTodo,
     deleteTodo,
+    updateTodo,
     isLoaded
-  }),[todos, addTodo, deleteTodo, isLoaded]);
+  }),[todos, addTodo, deleteTodo, updateTodo, isLoaded]);
 
   return (
     <TodoContext.Provider value={contextValue}>

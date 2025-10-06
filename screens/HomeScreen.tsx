@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -10,37 +10,31 @@ import {
   StyleSheet
 } from 'react-native';
 
-import {useTodos, TodoItem} from '../contexts/TodoContext';
+import { useTodos } from '../contexts/TodoContext';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
+import TodoItemComponent from '../components/TodoItem';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 export default function HomeScreen({navigation}:Props) {
 
-    const {todos, addTodo, deleteTodo} = useTodos();
-
+  const {todos, addTodo, deleteTodo, updateTodo} = useTodos();
   const [inputText, setInputText] = useState('');
 
-  const handleAddTodo = () => {
+  const inputRef = useRef<TextInput>(null);
+
+  const handleAddTodo = useCallback(() => {
      if(inputText.trim().length === 0){
-       Alert.alert('Error', '할 일 내용을 입력해주세요.');
+       Alert.alert('경고', '할 일 내용을 입력해주세요.');
        return;
      }
      addTodo(inputText);
      setInputText('');
-   }
 
-    const TodoItemComponent = ({item}: {item: TodoItem}) => {
-        return(
-            <TouchableOpacity onPress={() => deleteTodo(item.key)}>
-                <View style={styles.listItem}>
-                  <Text style={styles.listText}>{item.text}</Text>
-                  <Text style={styles.deleteIndicator}>❌</Text>
-                </View>
-            </TouchableOpacity>
-        )
-    }
+     inputRef.current?.focus();
+
+   },[inputText, addTodo])
 
     return(
       <View style={styles.screen}>
@@ -55,10 +49,14 @@ export default function HomeScreen({navigation}:Props) {
         </TouchableOpacity>
           <View style={styles.inputContainer}>
             <TextInput
+              ref={inputRef}
               style={styles.input}
               placeholder={'새로운 할 일을 입력하세요'}
               onChangeText={setInputText}
               value={inputText}
+              onSubmitEditing={handleAddTodo}
+              returnKeyType={'done'}
+              blurOnSubmit={false}
             />
             <Button
               title={'추가'}
