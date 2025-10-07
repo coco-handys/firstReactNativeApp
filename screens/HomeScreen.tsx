@@ -42,7 +42,7 @@ export default function HomeScreen({navigation}:Props) {
               나만의 할 일 리스트 📝
           </Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate('Settings')}
+          onPress={() => navigation.navigate('Completed')}
           style={styles.navButton}
         >
           <Text style={styles.navButtonText}>Go to Settings</Text>

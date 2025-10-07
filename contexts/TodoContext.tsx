@@ -13,6 +13,7 @@ const TODO_STORAGE_KEY = '@MyApp:todos';
 export type TodoItem = {
   key: string;
   text: string;
+  isCompleted: boolean;
 }
 
 export type TodoContextType = {
@@ -20,6 +21,7 @@ export type TodoContextType = {
   addTodo: (text: string) => void;
   deleteTodo: (key:string) => void;
   updateTodo: (key:string, newText:string) => void;
+  toggleComplete: (key:string) => void;
   isLoaded: boolean;
 }
 
@@ -61,6 +63,10 @@ export const TodoProvider = ({children}) => {
     saveTodos();
   }, [todos, isLoaded]);
 
+  const toggleComplete = useCallback((key:string) => {
+    setTodos(currentTodos => currentTodos.map(todo => todo.key === key ? {...todo, isCompleted: !todo.isCompleted}: todo))
+  }, []);
+
   const addTodo = useCallback((text:string) => {
     if(text.trim().length === 0){
       return;
@@ -69,7 +75,8 @@ export const TodoProvider = ({children}) => {
       ...currentTodo,
       {
         key: Math.random().toString(),
-        text
+        text,
+        isCompleted: false
       }
     ])
   }, []);
@@ -90,8 +97,9 @@ export const TodoProvider = ({children}) => {
     addTodo,
     deleteTodo,
     updateTodo,
+    toggleComplete,
     isLoaded
-  }),[todos, addTodo, deleteTodo, updateTodo, isLoaded]);
+  }),[todos, addTodo, deleteTodo, updateTodo,toggleComplete, isLoaded]);
 
   return (
     <TodoContext.Provider value={contextValue}>

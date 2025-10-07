@@ -10,7 +10,7 @@ import {
 import {useTodos} from '../contexts/TodoContext';
 
 const TodoItem = ({item}) => {
- const {deleteTodo, updateTodo} = useTodos();
+ const { deleteTodo, updateTodo, toggleComplete } = useTodos();
  const [isEditing, setIsEditing] = useState(false);
  const [editText, setEditText] = useState(item.text);
 
@@ -46,12 +46,14 @@ const TodoItem = ({item}) => {
  return (
    <TouchableOpacity
      onLongPress={() => setIsEditing(true)}
-     onPress={() => deleteTodo(item.key)}
+     onPress={() => toggleComplete(item.key)}
    >
-   <View style={styles.listItem}>
-     <Text style={styles.listText}>{item.text}</Text>
-     <Text style={styles.deleteIndicator}>❌</Text>
-   </View>
+     <View style={[styles.listItem, item.isCompleted && styles.listItemCompleted]}>
+       <Text style={[styles.listText, item.isCompleted && styles.listTextCompleted]}>{item.text}</Text>
+       <TouchableOpacity onPress={() => deleteTodo(item.key)}>
+         <Text style={styles.deleteIndicator}>❌ 삭제</Text>
+       </TouchableOpacity>
+     </View>
    </TouchableOpacity>
  )
 }
@@ -96,5 +98,12 @@ const styles = StyleSheet.create({
     },
     deleteIndicator: {
       fontSize: 18,
+    },
+    listItemCompleted: {
+      backgroundColor: '#d1fae5',
+    },
+    listTextCompleted: {
+      textDecorationLine: 'line-through',
+      color: '#6b7280',
     },
 })

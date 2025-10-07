@@ -6,11 +6,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import {TodoProvider} from './contexts/TodoContext';
 import HomeScreen from './screens/HomeScreen';
-import SettingsScreen from './screens/SettingsScreen';
+import CompletedScreen from './screens/CompletedScreen';
 
 export type RootStackParamList = {
   Home: undefined;
-  Settings: undefined;
+  Completed: undefined;
 }
 
 const Stack = createNativeStackNavigator()
@@ -29,7 +29,7 @@ export default function App() {
            }}
          >
            <Stack.Screen name={'Home'} component={HomeScreen} options={{ title: '나만의 할 일 리스트 📝' }}/>
-            <Stack.Screen name={'Settings'} component={SettingsScreen} options={{ title: '설정'}} />
+            <Stack.Screen name={'Completed'} component={CompletedScreen} options={{ title: '완료 항목'}} />
          </Stack.Navigator>
        </NavigationContainer>
      </TodoProvider>
