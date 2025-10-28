@@ -3,12 +3,12 @@ import {
   View,
   Text,
   TextInput,
-  Button,
-  TouchableOpacity,
   Alert,
   FlatList,
   StyleSheet
 } from 'react-native';
+
+import { CustomButton } from '@components/layout/Button';
 
 import { useTodos } from '../contexts/TodoContext';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -38,30 +38,28 @@ export default function HomeScreen({navigation}:Props) {
 
     return(
       <View style={styles.screen}>
-          <Text style={styles.title}>
-              나만의 할 일 리스트 📝
+          <Text style={styles.subTitle}>
+            <Text style={{fontWeight: 600}}>Tidy</Text> 깔끔하게 정리하는 하루
           </Text>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Completed')}
-          style={styles.navButton}
-        >
-          <Text style={styles.navButtonText}>Go to Settings</Text>
-        </TouchableOpacity>
+          <Text style={styles.title}>
+              TO DO LIST
+          </Text>
           <View style={styles.inputContainer}>
             <TextInput
               ref={inputRef}
               style={styles.input}
-              placeholder={'새로운 할 일을 입력하세요'}
+              placeholder={"What's your plan?"}
               onChangeText={setInputText}
               value={inputText}
               onSubmitEditing={handleAddTodo}
               returnKeyType={'done'}
               blurOnSubmit={false}
             />
-            <Button
-              title={'추가'}
+            <CustomButton
+              text={'추가'}
               onPress={handleAddTodo}
-              color={'#3b82f6'}
+              buttonStyle={styles.plusButton}
+              textStyle={styles.plusButtonText}
             />
           </View>
           <FlatList
@@ -77,26 +75,29 @@ const styles = StyleSheet.create({
   screen: {
     padding: 20,
     flex: 1,
-    paddingTop: 48,
-    backgroundColor: '#f0f4f8'
+    paddingTop: 32,
+    backgroundColor: 'white'
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center'
+    fontSize: 28,
+    fontWeight: 900,
+     marginBottom: 32,
   },
-  navButton: {
-    backgroundColor: '#10b981',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 20,
-    alignItems: 'center'
+   subTitle: {
+    fontSize: 12,
+    color: '#657698ff',
+    marginBottom: 4,
   },
-  navButtonText: {
+  plusButton:{
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    backgroundColor: '#8d9fb4ff',
+    borderRadius: 6,
+  },
+  plusButtonText:{
+    fontSize:12,
     color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
+     fontWeight: 'bold'
   },
   inputContainer: {
     flexDirection: 'row',
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   input: {
-    borderBottomColor: '#ccc',
+    borderBottomColor: '#e9e9e9ff',
     borderBottomWidth: 1,
     padding: 10,
     flex: 1,

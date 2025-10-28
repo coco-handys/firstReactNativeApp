@@ -8,6 +8,7 @@ import {
   StyleSheet
 } from 'react-native';
 import {useTodos} from '../contexts/TodoContext';
+import { CustomButton } from './layout/Button';
 
 const TodoItem = ({item}) => {
  const { deleteTodo, updateTodo, toggleComplete } = useTodos();
@@ -50,9 +51,11 @@ const TodoItem = ({item}) => {
    >
      <View style={[styles.listItem, item.isCompleted && styles.listItemCompleted]}>
        <Text style={[styles.listText, item.isCompleted && styles.listTextCompleted]}>{item.text}</Text>
-       <TouchableOpacity onPress={() => deleteTodo(item.key)}>
-         <Text style={styles.deleteIndicator}>❌ 삭제</Text>
-       </TouchableOpacity>
+       <CustomButton 
+         text={'Delete'}
+         onPress={() => deleteTodo(item.key)}
+         textStyle={styles.deleteButtonText}
+       />
      </View>
    </TouchableOpacity>
  )
@@ -67,6 +70,11 @@ const styles = StyleSheet.create({
       padding: 10,
       borderBottomWidth: 1,
       borderColor: '#ccc',
+   },
+   deleteButtonText:{
+      fontSize: 12,
+      color: '#d45353ff',
+      fontWeight: 'bold',
    },
     editInput: {
       flex: 1,
@@ -89,21 +97,27 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      padding: 10,
-      borderBottomWidth: 1,
-      borderColor: '#ccc',
+      borderColor: '#eceef4ff',
+      borderWidth: 1,
+      padding: 16,
+      marginBottom: 10,
+      borderRadius: 6,
     },
     listText: {
       fontSize: 16,
-    },
+      fontWeight: 600,
+      color: '#404044ff',
+       },
     deleteIndicator: {
       fontSize: 18,
     },
     listItemCompleted: {
-      backgroundColor: '#d1fae5',
+      backgroundColor: '#f3f4f5ff',
+      borderWidth: 0,
     },
     listTextCompleted: {
       textDecorationLine: 'line-through',
-      color: '#6b7280',
+      color: '#a3a9b2ff',
+      fontWeight: 'normal',
     },
 })

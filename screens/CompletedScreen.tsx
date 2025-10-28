@@ -29,7 +29,7 @@ export default function CompletedScreen() {
 
   return (
     <View style={styles.screen}>
-      <Text style={styles.title}>완료된 할 일 목록 ✅</Text>
+      <Text style={styles.title}>Complete List</Text>
       {
         completedTodos.length === 0 ? (
           <Text style={styles.emptyText}>완료된 할 일이 없습니다.</Text>
@@ -45,9 +45,7 @@ export default function CompletedScreen() {
 
 const styles = StyleSheet.create({
   listItem: {
-    padding: 15,
-    backgroundColor: '#f8f8f8',
-    borderBottomWidth: 1,
+    paddingVertical: 12,
     borderColor: '#eee',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -55,25 +53,22 @@ const styles = StyleSheet.create({
   },
   listTextCompleted: {
     fontSize: 16,
-    color: '#9ca3af',
     textDecorationLine: 'line-through'
   },
   screen: {
-    padding: 20,
+    padding: 32,
     flex: 1,
-    paddingTop: 48,
-    backgroundColor: '#f0f4f8'
+    paddingTop: 32,
+    backgroundColor: 'white'
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    textAlign: 'center'
   },
   emptyText: {
-    textAlign: 'center',
-    color: '#6b7280',
-    marginTop: 20,
-    fontSize: 16
+     fontSize: 16,
+     marginVertical: 24,
+    color: '#9ca3af',
   },
 })
